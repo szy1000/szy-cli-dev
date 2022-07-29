@@ -1,8 +1,16 @@
 {
-  "name": "szy-cli-dev",
-  "version": "1.0.0",
+  "name": "szy-dev-cli",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
+  "license": "MIT",
+  "keywords": [
+    "szy",
+    "cli",
+    "scaffold",
+    "frontend",
+    ""
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

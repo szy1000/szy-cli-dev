@@ -26,19 +26,29 @@ function core() {
     checkUserHome()
     checkInputArgs()
     checkEnv()
+
+    checkGlobalUpdate()
   } catch (e) {
     log.error(e.message)
   }
 }
 
-function checkGlobalUpdate() {
+async function checkGlobalUpdate() {
   // 1、获取当前版本号和模块名
   const currentVersion = pkg.version;
   const npmName = pkg.name;
   // 2、调用npm API 获取所有版本号
+  const {getNpmSemverVersion} = require('@szy-cli-dev/get-npm-info')
+  const lastVersion = await getNpmSemverVersion(currentVersion, npmName)
+  console.log(lastVersion)
+  if(lastVersion && semver.gt(lastVersion,currentVersion)) {
+    log.warn(colors.yellow(`请手动更新 ${npmName},当前版本: ${currentVersion}, 最新版本: ${lastVersion} 更新命令: npm install -g ${npmName}
+    `))
+  }
+
   // 3、提取所有版本号进行比对 哪些版本号大于当前版本
   // 4、获取最新版本号 提示用户升级
-  
+
 }
 
 
@@ -50,7 +60,7 @@ function checkEnv() {
       path: dotenvPath
     })
   }
-  
+
   log.verbose('环境变量', config)
 }
 
@@ -83,7 +93,7 @@ function checkUserHome() {
 
 function checkRoot() {
   // 获取管理员权限 0 为管理员
-  // console.log(process.geteuid()) 
+  // console.log(process.geteuid())
   rootCheck() // 核心 process.setuid()
 
 }

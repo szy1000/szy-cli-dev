@@ -1,16 +1,18 @@
 {
-  "name": "szy-cli-dev",
+  "name": "shenzhiyong",
   "version": "1.0.4",
   "description": "test",
   "license": "MIT",
   "repository": "",
   "dependencies": {
+    "@szy-cli-dev/get-npm-info": "file:../../utils/get-npm-info",
     "@szy-cli-dev/log": "file:../../utils/log",
     "colors": "^1.4.0",
-    "path-exists": "^5.0.0",
+    "commander": "^9.4.0",
+    "minimist": "^1.2.5",
+    "path-exists": "4.0.0",
     "root-check": "1.0.0",
     "semver": "^7.3.7",
-    "minimist": "^1.2.5",
     "user-home": "^3.0.0"
   },
   "directories": {

@@ -1,5 +1,5 @@
 {
-  "name": "shenzhiyong",
+  "name": "szy-cli-dev",
   "version": "1.0.4",
   "description": "test",
   "license": "MIT",
@@ -7,6 +7,7 @@
   "dependencies": {
     "@szy-cli-dev/get-npm-info": "file:../../utils/get-npm-info",
     "@szy-cli-dev/log": "file:../../utils/log",
+    "@szy-cli-dev/init": "file:../../commands/szy-cli-init",
     "colors": "^1.4.0",
     "commander": "^9.4.0",
     "minimist": "^1.2.5",

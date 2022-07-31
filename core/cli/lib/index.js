@@ -4,12 +4,16 @@ module.exports = core
 const path = require('path')
 const semver = require('semver')
 const colors = require('colors/safe')
+const commander = require('commander')
 const pathExists = require('path-exists').sync
 const userHome = require('user-home')
 const log = require('@szy-cli-dev/log')
 const rootCheck = require('root-check')
 const constant = require('./const')
-const pkg = require('../package')
+const pkg = require('../package');
+const init = require('@szy-cli-dev/init')
+const process = require('process');
+const console = require('console');
 // require 支持 .js .json .node
 // js==> modules.exports/exports
 // .json ==> JSON.parse
@@ -17,6 +21,7 @@ const pkg = require('../package')
 // .any ==> .js
 
 let args, config;
+const program = new commander.Command()
 
 function core() {
   try {
@@ -24,13 +29,51 @@ function core() {
     checkNodeVersion()
     checkRoot()
     checkUserHome()
-    checkInputArgs()
+    // checkInputArgs()
     checkEnv()
-
     checkGlobalUpdate()
+    registerCommand()
   } catch (e) {
     log.error(e.message)
   }
+}
+
+function registerCommand() {
+  program
+    .name(Object.keys(pkg.bin)[0])
+    .usage('<command> [options]')
+    .version(pkg.version)
+    .option('-d --debug', '是否是开发模式', false)
+  
+  program
+    .command('init [name]')
+    .option('-f, --force', '是否强制初始化项目')
+    .action(init)
+
+  // 开启debug模式
+  program.on('option:debug', function() {
+    if(program.debug) {
+      process.env.LOG_LEVEL = 'verbose'
+    } else {
+      process.env.LOG_LEVEL = 'info'
+    }
+    log.level = process.env.LOG_LEVEL
+  })
+
+  // 为未知命令的监听
+  program.on('command:*', function(obj) {
+    console.log(colors.red(`未知命令: ${[obj[0]]}`))
+    const availableCommands = program.commands.map(cmd => cmd.name())
+    if(availableCommands.length) {
+      console.log('可用命令:',availableCommands.join(','))
+    }
+  })
+
+  if(program.args && program.args.length < 1) {
+    // program.outputHelp()
+  }
+
+  program.parse(process.argv)
 }
 
 async function checkGlobalUpdate() {
@@ -40,7 +83,7 @@ async function checkGlobalUpdate() {
   // 2、调用npm API 获取所有版本号
   const {getNpmSemverVersion} = require('@szy-cli-dev/get-npm-info')
   const lastVersion = await getNpmSemverVersion(currentVersion, npmName)
-  console.log(lastVersion)
+  // console.log(lastVersion)
   if(lastVersion && semver.gt(lastVersion,currentVersion)) {
     log.warn(colors.yellow(`请手动更新 ${npmName},当前版本: ${currentVersion}, 最新版本: ${lastVersion} 更新命令: npm install -g ${npmName}
     `))
@@ -60,8 +103,8 @@ function checkEnv() {
       path: dotenvPath
     })
   }
-
-  log.verbose('环境变量', config)
+  // todo
+  // log.verbose('环境变量', config)
 }
 
 function createDefaultConfig() {
@@ -71,19 +114,19 @@ function createDefaultConfig() {
   // if(pr)
 }
 
-function checkInputArgs() {
-  const minimist = require('minimist')
-  args = minimist(process.argv.slice(2))
-  checkArgs()
-}
+// function checkInputArgs() {
+  // const minimist = require('minimist')
+  // args = minimist(process.argv.slice(2))
+  // checkArgs()
+// }
 
 
-function checkArgs() {
-  if(args.debug) {
-    process.env.LOG_LEVEL = 'verbose'
-  }
-  log.level = process.env.LOG_LEVEL
-}
+// function checkArgs() {
+//   if(args.debug) {
+//     process.env.LOG_LEVEL = 'verbose'
+//   }
+//   log.level = process.env.LOG_LEVEL
+// }
 
 function checkUserHome() {
   if(!userHome || !pathExists(userHome)) {

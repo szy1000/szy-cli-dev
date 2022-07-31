@@ -1,0 +1,26 @@
+{
+  "name": "szy-cli-init",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "szy1000 <1538078053@qq.com>",
+  "homepage": "https://shenzhiyong.com.cn/core/szy-cli-init",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/szy1000/szy-cli-dev.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/szy1000/szy-cli-dev/issues"
+  }
+}
